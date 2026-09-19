@@ -1,0 +1,502 @@
+<!DOCTYPE html>
+<html lang="zh-Hant">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>古文今讀 6–10 課　虛字整理與選擇題</title>
+<style>
+  :root {
+    --bg: #ffffff; --fg: #1f2a1f; --muted: #6b7280; --accent: #385723; --accent-bg: #e2efda;
+    --line: #a6a6a6; --row: #f7f7f7; --hl: #c00000; --blue: #ddebf7; --orange: #fce4d6;
+    --ok: #2e7d32; --ok-bg: #e3f2e1; --bad: #c62828; --bad-bg: #fdeaea;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root:not([data-theme="light"]) {
+      --bg: #161a16; --fg: #e8ece8; --muted: #9aa39a; --accent: #a9d18e; --accent-bg: #253323;
+      --line: #4a544a; --row: #1e241e; --hl: #ff8a80; --blue: #1f3040; --orange: #40291f;
+      --ok: #81c784; --ok-bg: #1f3a21; --bad: #ef9a9a; --bad-bg: #3f2222;
+    }
+  }
+  * { box-sizing: border-box; }
+  body {
+    margin: 0; background: var(--bg); color: var(--fg);
+    font-family: "DFKai-SB", "BiauKai", "標楷體", "Noto Serif TC", "Songti TC", serif;
+    font-size: 17px; line-height: 1.7;
+  }
+  main { max-width: 860px; margin: 0 auto; padding: 20px 16px 60px; }
+  h1 { text-align: center; color: var(--accent); font-size: 1.9rem; margin: 8px 0 2px; }
+  .subtitle { text-align: center; font-size: 1.35rem; font-weight: bold; margin: 0 0 6px; }
+  .lessons-line, .legend { text-align: center; color: var(--muted); font-size: .85rem; margin: 2px 0; }
+  nav.toc { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; margin: 14px 0 6px; }
+  nav.toc a {
+    text-decoration: none; color: var(--accent); background: var(--accent-bg);
+    padding: 4px 12px; border-radius: 999px; font-size: .9rem;
+  }
+  h2 {
+    color: var(--accent); font-size: 1.45rem; margin: 28px 0 10px; padding-bottom: 2px;
+    border-bottom: 2px solid #548235; scroll-margin-top: 12px;
+  }
+  h3 { font-size: 1.1rem; margin: 16px 0 6px; }
+  h3.lesson { background: var(--accent-bg); color: var(--accent); padding: 4px 10px; border-radius: 4px; margin-top: 22px; }
+  h3.lesson small { font-weight: normal; color: var(--muted); font-size: .8rem; }
+  .tablewrap { overflow-x: auto; }
+  table { border-collapse: collapse; width: 100%; }
+  th, td { border: 1px solid var(--line); padding: 5px 10px; vertical-align: middle; }
+  table.meaning thead th { background: var(--accent-bg); text-align: center; font-size: .95rem; }
+  table.meaning.blue thead th { background: var(--blue); }
+  table.meaning.orange thead th { background: var(--orange); }
+  table.meaning tbody th { background: var(--row); width: 9.5em; text-align: center; font-size: .95rem; white-space: nowrap; }
+  .ex { font-size: .98rem; padding: 1px 0; }
+  .src { color: var(--muted); font-size: .75rem; margin-left: .3em; }
+  .hl { color: var(--hl); font-weight: bold; }
+  .note { font-size: .95rem; margin: 8px 0; }
+  .infoline { text-align: center; margin: 6px 0 10px; }
+  .printonly { display: none; }
+  .bar {
+    position: sticky; top: 0; z-index: 10; display: flex; flex-wrap: wrap; align-items: center; gap: 8px 12px;
+    background: var(--bg); border-bottom: 1px solid var(--line); padding: 8px 0; margin: 10px 0 0;
+    font-family: system-ui, -apple-system, "Noto Sans TC", "PingFang TC", "Microsoft JhengHei", sans-serif; font-size: .88rem;
+  }
+  .bar .modes { display: inline-flex; border: 1px solid var(--line); border-radius: 8px; overflow: hidden; }
+  .bar button { font: inherit; color: var(--fg); background: var(--bg); border: 0; padding: 6px 12px; cursor: pointer; }
+  .bar .seg.on { background: var(--accent); color: var(--bg); }
+  .bar .stats { flex: 1 1 auto; min-width: 9em; }
+  .bar .acts { display: inline-flex; gap: 6px; }
+  .bar .act { border: 1px solid var(--line); border-radius: 8px; }
+  .bar .act#submit { background: var(--accent); color: var(--bg); border-color: var(--accent); }
+  .bar button:focus-visible, button.opt:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+  button.opt {
+    width: 100%; text-align: left; font: inherit; color: inherit; background: transparent; cursor: pointer;
+    border: 1px solid transparent; border-radius: 8px; padding: 3px 8px; margin: 1px 0; line-height: 1.6;
+  }
+  button.opt:hover { background: var(--accent-bg); }
+  button.opt.sel { background: var(--accent-bg); border-color: var(--accent); }
+  button.opt.right { background: var(--ok-bg); border-color: var(--ok); }
+  button.opt.wrong { background: var(--bad-bg); border-color: var(--bad); }
+  button.opt .mark { margin-left: .4em; font-weight: bold; font-family: system-ui, sans-serif; }
+  button.opt.right .mark { color: var(--ok); }
+  button.opt.wrong .mark { color: var(--bad); }
+  li.q.done button.opt { cursor: default; }
+  li.q.done button.opt:hover:not(.right):not(.wrong) { background: transparent; }
+  .exp { margin: 4px 0 0 2.4em; padding: 6px 10px; border-radius: 8px; background: var(--row); font-size: .93rem; line-height: 1.6; }
+  .exp .res { margin-right: .5em; font-family: system-ui, -apple-system, "Noto Sans TC", sans-serif; }
+  .exp.ok .res { color: var(--ok); }
+  .exp.no .res { color: var(--bad); }
+  .sec-score { font-family: system-ui, -apple-system, "Noto Sans TC", sans-serif; font-size: .9rem; color: var(--muted); margin: 4px 0 0; }
+
+  .rule { font-weight: bold; margin: 8px 0; }
+  ol.qs { list-style: none; counter-reset: q; padding: 0; margin: 0; }
+  li.q { counter-increment: q; margin: 10px 0 14px; break-inside: avoid; page-break-inside: avoid; }
+  li.q .stem::before { content: "（　　）" counter(q) ". "; white-space: pre; }
+  li.q .stem { padding-left: 0; }
+  ul.opts { list-style: none; margin: 2px 0 0 2.4em; padding: 0; display: grid; grid-template-columns: 1fr 1fr; column-gap: 1em; }
+  ul.opts.one { grid-template-columns: 1fr; }
+  ul.opts .lab { margin-right: .2em; }
+  u { text-underline-offset: 3px; }
+  details.answers { margin-top: 10px; border: 1px solid var(--line); border-radius: 6px; padding: 8px 12px; }
+  details.answers > summary { cursor: pointer; font-weight: bold; color: var(--accent); font-size: 1.05rem; padding: 4px 0; }
+  table.key thead th { background: var(--accent-bg); }
+  table.key td.c { text-align: center; white-space: nowrap; }
+  table.key td.ans { color: var(--hl); font-weight: bold; }
+  table.key { font-size: .95rem; }
+  footer { text-align: center; color: var(--muted); font-size: .8rem; margin-top: 36px; }
+  @media (max-width: 560px) {
+    body { font-size: 16px; }
+    ul.opts { grid-template-columns: 1fr; margin-left: 1.6em; }
+    .exp { margin-left: 1.6em; }
+    .bar .stats { flex-basis: 100%; order: 3; }
+    table.meaning tbody th { width: 6.5em; white-space: normal; }
+  }
+  @media print {
+    body { font-size: 12pt; }
+    main { max-width: none; padding: 0; }
+    nav.toc, .bar, .exp, .sec-score { display: none !important; }
+    .printonly { display: block; }
+    button.opt { border: 0; padding: 0; }
+    h2.newpage { page-break-before: always; }
+    h2, h3 { page-break-after: avoid; }
+    tr { page-break-inside: avoid; }
+    .tablewrap { overflow: visible; }
+    details.answers { border: none; padding: 0; }
+  }
+</style>
+</head>
+<body>
+<main>
+  <h1>古文今讀 第 6–10 課</h1>
+  <p class="subtitle">虛字整理：或、為、於、乃、比、悉舉竟、如若、之、時間詞</p>
+  <p class="lessons-line">第6課 指鹿為馬　第7課 漢世老人　第8課 州官放火　第9課 司馬光勤學　第10課 晏子諫君</p>
+  <p class="legend">出處：簡報＝老師簡報例句；課本標註＝課本旁註所列；補充＝整理時另加的用法</p>
+  <p class="legend">互動版（可直接點選作答）｜<a href="static.html">前往講義版（可列印）</a></p>
+  <nav class="toc" aria-label="目錄">
+    <a href="#handout">虛字整理</a>
+    <a href="#notes">各課重點</a>
+    <a href="#extra">補充</a>
+    <a href="#practice">虛字練習</a>
+    <a href="#lessonqs">課文選擇題</a>
+    <a href="#answers">參考答案</a>
+  </nav>
+
+  <div class="bar" id="bar" role="region" aria-label="作答控制">
+    <div class="modes" role="group" aria-label="作答模式">
+      <button type="button" id="m-practice" class="seg on" aria-pressed="true">即時對答案</button>
+      <button type="button" id="m-test" class="seg" aria-pressed="false">交卷模式</button>
+    </div>
+    <div class="stats" id="stats" aria-live="polite">已作答 0／45　答對 0</div>
+    <div class="acts">
+      <button type="button" id="submit" class="act" hidden>交卷</button>
+      <button type="button" id="reset" class="act">重新作答</button>
+    </div>
+  </div>
+
+  <section id="handout">
+    <h2>一、或</h2>
+    <div class="tablewrap"><table class="meaning ">
+<thead><tr><th>意義（詞性）</th><th>例句（出處）</th></tr></thead>
+<tbody>
+<tr><th scope="row">有的（人），代詞</th><td><div class="ex">左右<span class="hl">「或」</span>默，<span class="hl">「或」</span>言馬以阿順趙高<span class="src">（第6課）</span></div><div class="ex"><span class="hl">「或」</span>言鹿者，高因陰中諸言鹿者以法<span class="src">（第6課）</span></div></td></tr><tr><th scope="row">有時，副詞</th><td><div class="ex"><span class="hl">「或」</span>人從之求丐者<span class="src">（第7課，注釋⑥）</span></div><div class="ex"><span class="hl">「或」</span>在馬上，<span class="hl">「或」</span>中夜不寢時<span class="src">（第9課）</span></div></td></tr>
+</tbody></table></div>
+    <p class="note">辨別：指人 → 有的（人）；指時間 → 有時。</p>
+    <h2>二、為</h2>
+    <h3>讀ㄨㄟˊ</h3>
+    <div class="tablewrap"><table class="meaning blue">
+<thead><tr><th>意義（詞性）</th><th>例句（出處）</th></tr></thead>
+<tbody>
+<tr><th scope="row">當作、是，動詞</th><td><div class="ex">謂鹿<span class="hl">「為」</span>馬<span class="src">（第6課，課本標註）</span></div></td></tr><tr><th scope="row">做、發動，動詞</th><td><div class="ex">趙高欲<span class="hl">「為」</span>亂<span class="src">（第6課，補充）</span></div></td></tr>
+</tbody></table></div>
+    <h2>三、於</h2>
+    <div class="tablewrap"><table class="meaning orange">
+<thead><tr><th>意義（詞性）</th><th>例句（出處）</th></tr></thead>
+<tbody>
+<tr><th scope="row">給，介詞</th><td><div class="ex">持鹿獻<span class="hl">「於」</span>二世<span class="src">（第6課，課本標註）</span></div></td></tr><tr><th scope="row">在，介詞</th><td><div class="ex">揭<span class="hl">「於」</span>市曰<span class="src">（第8課，課本標註）</span></div></td></tr>
+</tbody></table></div>
+    <p class="note">辨別：同一個「於」，看前面的動詞——獻於 → 給；揭於 → 在。</p>
+    <h2>四、乃</h2>
+    <div class="tablewrap"><table class="meaning ">
+<thead><tr><th>意義（詞性）</th><th>例句（出處）</th></tr></thead>
+<tbody>
+<tr><th scope="row">於是，副詞</th><td><div class="ex"><span class="hl">「乃」</span>先設驗<span class="src">（第6課，注釋③）</span></div><div class="ex"><span class="hl">「乃」</span>令出裘發粟與飢寒<span class="src">（第10課，課本標註）</span></div></td></tr><tr><th scope="row">才，副詞</th><td><div class="ex">迨能倍誦<span class="hl">「乃」</span>止<span class="src">（第9課，補充）</span></div><div class="ex"><span class="hl">「乃」</span>終身不忘也<span class="src">（第9課，補充）</span></div></td></tr>
+</tbody></table></div>
+    <h2>五、比（讀ㄅㄧˋ）</h2>
+    <div class="tablewrap"><table class="meaning blue">
+<thead><tr><th>意義（詞性）</th><th>例句（出處）</th></tr></thead>
+<tbody>
+<tr><th scope="row">等到，動詞</th><td><div class="ex"><span class="hl">「比」</span>至於外，才餘半在<span class="src">（第7課，注釋⑨）</span></div><div class="ex"><span class="hl">「比」</span>行百里<span class="src">（簡報）</span></div></td></tr><tr><th scope="row">並列緊靠，動詞</th><td><div class="ex"><span class="hl">「比」</span>鄰而居<span class="src">（簡報）</span></div><div class="ex"><span class="hl">「比」</span>肩齊步<span class="src">（簡報）</span></div></td></tr><tr><th scope="row">排列密集而整齊，形容詞</th><td><div class="ex">櫛次鱗<span class="hl">「比」</span><span class="src">（簡報）</span></div></td></tr><tr><th scope="row">結黨營私，動詞</th><td><div class="ex">朋<span class="hl">「比」</span>為奸<span class="src">（簡報）</span></div><div class="ex">君子周而不<span class="hl">「比」</span>，小人<span class="hl">「比」</span>而不周<span class="src">（簡報）</span></div></td></tr>
+</tbody></table></div>
+    <p class="note">以上都讀ㄅㄧˋ，與「比較」的ㄅㄧˇ不同。</p>
+    <h2>六、悉、舉、竟</h2>
+    <div class="tablewrap"><table class="meaning orange">
+<thead><tr><th>意義（詞性）</th><th>例句（出處）</th></tr></thead>
+<tbody>
+<tr><th scope="row">全部地，副詞</th><td><div class="ex">遂<span class="hl">「悉」</span>罷之<span class="src">（課本第7頁）</span></div></td></tr><tr><th scope="row">全部的、整個，形容詞</th><td><div class="ex"><span class="hl">「舉」</span>州皆謂燈為火<span class="src">（第8課，課本第11頁）</span></div><div class="ex"><span class="hl">「竟」</span>月無雨<span class="src">（課本第94頁）</span></div></td></tr>
+</tbody></table></div>
+    <p class="note">悉、舉、竟（文言文）皆可表示「全部、整個、全」。</p>
+    <h2>七、如、若</h2>
+    <div class="tablewrap"><table class="meaning ">
+<thead><tr><th>意義（詞性）</th><th>例句（出處）</th></tr></thead>
+<tbody>
+<tr><th scope="row">往、去，動詞</th><td><div class="ex"><span class="hl">「如」</span>廁<span class="src">（簡報，比較頁5）</span></div></td></tr><tr><th scope="row">及、比得上，動詞</th><td><div class="ex">遠親不<span class="hl">「如」</span>近鄰<span class="src">（簡報，比較頁5）</span></div><div class="ex">患記問不<span class="hl">「若」</span>人<span class="src">（第9課）</span></div></td></tr><tr><th scope="row">如同、好像，動詞</th><td><div class="ex">愛人<span class="hl">「如」</span>己<span class="src">（簡報，比較頁5）</span></div></td></tr><tr><th scope="row">依照，動詞</th><td><div class="ex"><span class="hl">「如」</span>約而行<span class="src">（簡報，比較頁5）</span></div></td></tr><tr><th scope="row">如果、假若，連詞</th><td><div class="ex"><span class="hl">「如」</span>不可求，從吾所好<span class="src">（簡報，比較頁5）</span></div></td></tr><tr><th scope="row">或者，連詞</th><td><div class="ex">安見方六七十，<span class="hl">「如」</span>五六十，而非邦也者<span class="src">（簡報，比較頁5）</span></div></td></tr><tr><th scope="row">表示比較，介詞</th><td><div class="ex">不<span class="hl">「若」</span>人有其寶<span class="src">（簡報，比較頁5）</span></div><div class="ex">人之困窮，甚<span class="hl">「如」</span>飢寒<span class="src">（簡報，比較頁5）</span></div></td></tr>
+</tbody></table></div>
+    <h2>八、之</h2>
+    <div class="tablewrap"><table class="meaning blue">
+<thead><tr><th>意義（詞性）</th><th>例句（出處）</th></tr></thead>
+<tbody>
+<tr><th scope="row">助詞，的</th><td><div class="ex">景公<span class="hl">「之」</span>時<span class="src">（第10課）</span></div><div class="ex">古<span class="hl">「之」</span>賢君<span class="src">（第10課）</span></div><div class="ex">狐白<span class="hl">「之」</span>裘<span class="src">（第10課）</span></div><div class="ex">飽而知人<span class="hl">「之」</span>飢，溫而知人<span class="hl">「之」</span>寒，逸而知人<span class="hl">「之」</span>勞<span class="src">（第10課，課本標註）</span></div></td></tr>
+</tbody></table></div>
+    <h2>九、時間詞</h2>
+    <div class="tablewrap"><table class="meaning orange">
+<thead><tr><th>意義（詞性）</th><th>例句（出處）</th></tr></thead>
+<tbody>
+<tr><th scope="row">輒：即、就，副詞</th><td><div class="ex">隨步<span class="hl">「輒」</span>減<span class="src">（第7課，注釋⑧）</span></div></td></tr><tr><th scope="row">尋：隨即，副詞</th><td><div class="ex"><span class="hl">「尋」</span>復囑云<span class="src">（第7課，注釋⑩）</span></div></td></tr><tr><th scope="row">復：又、再，副詞</th><td><div class="ex">尋<span class="hl">「復」</span>囑云<span class="src">（第7課，注釋⑪）</span></div></td></tr><tr><th scope="row">俄：不久，副詞</th><td><div class="ex">老人<span class="hl">「俄」</span>死<span class="src">（第7課，注釋⑯）</span></div></td></tr><tr><th scope="row">有間：一會兒</th><td><div class="ex">立<span class="hl">「有間」</span><span class="src">（第10課，注釋⑧）</span></div></td></tr>
+</tbody></table></div>
+    <p class="note">「很短的時間」的說法：俄、俄而、有間、須臾、轉瞬、彈指、剎那、一眨眼（課本旁批）。</p>
+  </section>
+
+  <section id="notes">
+    <h2 class="newpage">各課重點</h2>
+    <h3 class="lesson">第6課　指鹿為馬<small>　《史記》</small></h3>
+    <div class="tablewrap"><table class="meaning ">
+<thead><tr><th>詞語</th><th>意思</th></tr></thead>
+<tbody>
+<tr><th scope="row">趙高</th><td>秦二世時的丞相</td></tr><tr><th scope="row">亂</th><td>奪權</td></tr><tr><th scope="row">乃</th><td>於是</td></tr><tr><th scope="row">驗</th><td>試驗</td></tr><tr><th scope="row">二世</th><td>秦始皇的小兒子胡亥</td></tr><tr><th scope="row">默</th><td>沉靜無聲</td></tr><tr><th scope="row">阿順</th><td>阿諛順從</td></tr><tr><th scope="row">陰</th><td>暗地裡</td></tr>
+</tbody></table></div>
+    <p class="note"><b>課本隨堂練習答案：</b>1. C　2. D　3. A　4. B</p>
+    <p class="note">成語「指鹿為馬」:故意歪曲事實,混淆是非。</p>
+    <h3 class="lesson">第7課　漢世老人<small>　《笑林》</small></h3>
+    <div class="tablewrap"><table class="meaning ">
+<thead><tr><th>詞語</th><th>意思</th></tr></thead>
+<tbody>
+<tr><th scope="row">儉嗇</th><td>儉省吝嗇</td></tr><tr><th scope="row">惡衣疏食</th><td>粗糙低劣的衣食</td></tr><tr><th scope="row">侵晨</th><td>黎明(侵:接近)</td></tr><tr><th scope="row">聚斂</th><td>聚積錢財</td></tr><tr><th scope="row">厭</th><td>滿足(通「饜」)</td></tr><tr><th scope="row">或</th><td>有時</td></tr><tr><th scope="row">丐</th><td>乞求</td></tr><tr><th scope="row">輒</th><td>即、就</td></tr><tr><th scope="row">比</th><td>等到</td></tr><tr><th scope="row">尋</th><td>隨即</td></tr><tr><th scope="row">復</th><td>又、再</td></tr><tr><th scope="row">囑</th><td>吩咐</td></tr><tr><th scope="row">贍</th><td>周濟、救濟</td></tr><tr><th scope="row">慎</th><td>謹慎、當心</td></tr><tr><th scope="row">效</th><td>效法</td></tr><tr><th scope="row">俄</th><td>不久</td></tr><tr><th scope="row">沒</th><td>扣收財物</td></tr><tr><th scope="row">內帑</th><td>宮內貯藏錢財的府庫,即國庫</td></tr>
+</tbody></table></div>
+    <p class="note"><b>課本隨堂練習答案：</b>1. C　2. A　3. C　4. B</p>
+    <p class="note">「俄」是時間副詞,同義詞:轉瞬、彈指、一眨眼。</p>
+    <h3 class="lesson">第8課　州官放火<small>　《老學庵筆記》</small></h3>
+    <div class="tablewrap"><table class="meaning ">
+<thead><tr><th>詞語</th><th>意思</th></tr></thead>
+<tbody>
+<tr><th scope="row">作郡</th><td>當一州的長官</td></tr><tr><th scope="row">諱</th><td>忌諱</td></tr><tr><th scope="row">觸</th><td>冒犯</td></tr><tr><th scope="row">榜笞</th><td>鞭打</td></tr><tr><th scope="row">舉</th><td>整個</td></tr><tr><th scope="row">上元</th><td>元月十五日,即元宵節</td></tr><tr><th scope="row">放燈</th><td>元宵時張掛花燈的習俗</td></tr><tr><th scope="row">州治</th><td>州城</td></tr><tr><th scope="row">榜</th><td>布告</td></tr><tr><th scope="row">揭</th><td>公布</td></tr>
+</tbody></table></div>
+    <p class="note"><b>課本隨堂練習答案：</b>1. A　2. D　3. C　4. C</p>
+    <p class="note">文學常識「避諱」:古人言談書寫時,迴避君主或尊長的名號,以表示尊敬;遇到要避諱的字,用同音、音近或別的字代替。</p>
+    <h3 class="lesson">第9課　司馬光勤學<small>　《三朝名臣言行錄》</small></h3>
+    <div class="tablewrap"><table class="meaning ">
+<thead><tr><th>詞語</th><th>意思</th></tr></thead>
+<tbody>
+<tr><th scope="row">司馬溫公</th><td>司馬光死後被封為溫國公,故稱司馬溫公</td></tr><tr><th scope="row">患</th><td>擔心</td></tr><tr><th scope="row">既</th><td>已經</td></tr><tr><th scope="row">遊息</th><td>玩耍休息</td></tr><tr><th scope="row">下帷</th><td>董仲舒放下帷幔專心講學,借指讀書專心</td></tr><tr><th scope="row">絕編</th><td>孔子讀《易經》翻斷牛皮繩,指讀書刻苦</td></tr><tr><th scope="row">迨</th><td>等到</td></tr><tr><th scope="row">倍誦</th><td>背誦</td></tr><tr><th scope="row">嘗</th><td>曾經</td></tr><tr><th scope="row">中夜</th><td>半夜</td></tr><tr><th scope="row">寢</th><td>睡覺</td></tr>
+</tbody></table></div>
+    <p class="note"><b>課本隨堂練習答案：</b>1. A　2. B　3. C　4. B</p>
+    <p class="note">司馬光的人格特質:勤學、善用時間。效法的兩位:董仲舒(下帷)、孔子(韋編三絕)。</p>
+    <p class="note">歐陽修的「三上」:枕上、馬上、廁上。</p>
+    <p class="note">名句精讀:業精於勤,荒於嬉;行成於思,毀於隨。(唐‧韓愈〈進學解〉)</p>
+    <h3 class="lesson">第10課　晏子諫君<small>　《晏子春秋》</small></h3>
+    <div class="tablewrap"><table class="meaning ">
+<thead><tr><th>詞語</th><th>意思</th></tr></thead>
+<tbody>
+<tr><th scope="row">景公</th><td>名杵臼,春秋時代齊國國君</td></tr><tr><th scope="row">雨</th><td>降落、降下</td></tr><tr><th scope="row">霽</th><td>雪後放晴</td></tr><tr><th scope="row">被</th><td>披</td></tr><tr><th scope="row">裘</th><td>用狐狸腋下白色皮毛做成的皮襖</td></tr><tr><th scope="row">陛</th><td>宮殿的臺階</td></tr><tr><th scope="row">晏子</th><td>春秋時代齊國名相</td></tr><tr><th scope="row">間</th><td>一會兒</td></tr><tr><th scope="row">寡人</th><td>寡德的人,古代國君自稱的謙詞</td></tr><tr><th scope="row">聞命</th><td>聽從教誨</td></tr><tr><th scope="row">粟</th><td>糧食</td></tr>
+</tbody></table></div>
+    <p class="note"><b>課本隨堂練習答案：</b>1. B　2. D　3. B　4. C</p>
+    <p class="note">排比:「飽而知人之飢,溫而知人之寒,逸而知人之勞」。</p>
+    <p class="note">景公的反應:從善如流(察納雅言)。</p>
+  </section>
+
+  <section id="extra">
+    <h2>補充</h2>
+    <h3>勤學成語</h3>
+    <div class="tablewrap"><table class="meaning orange">
+<thead><tr><th>成語</th><th>讀音／意思</th></tr></thead>
+<tbody>
+<tr><th scope="row">夙夜匪懈</th><td>夙ㄙㄨˋ、匪ㄈㄟˇ:不。白天黑夜都不懈怠</td></tr><tr><th scope="row">孜孜不倦</th><td>孜孜ㄗ。從早到晚都不懈怠</td></tr><tr><th scope="row">孜孜矻矻</th><td>矻ㄎㄨˋ。勤奮不懈的樣子</td></tr><tr><th scope="row">手不釋卷</th><td>書不離手,讀書勤奮</td></tr><tr><th scope="row">韋編三絕</th><td>韋ㄨㄟˊ。孔子讀《易經》,翻斷牛皮繩多次</td></tr><tr><th scope="row">目不窺園</th><td>董仲舒專心讀書,不看窗外園子</td></tr><tr><th scope="row">牛角掛書</th><td>把書掛在牛角上,利用時間讀書</td></tr><tr><th scope="row">鑿壁偷光</th><td>鑿穿牆壁借鄰家燈光讀書</td></tr><tr><th scope="row">懸梁刺股</th><td>用繩子吊住頭髮、用錐子刺大腿,防止打瞌睡</td></tr><tr><th scope="row">焚膏繼晷</th><td>點燈接續日光,夜以繼日</td></tr><tr><th scope="row">囊螢映雪</th><td>用袋裝螢火蟲、藉雪光讀書</td></tr><tr><th scope="row">廢寢忘食</th><td>專心到忘了睡覺和吃飯</td></tr>
+</tbody></table></div>
+    <h3>四季與月份</h3>
+    <div class="tablewrap"><table class="meaning blue">
+<thead><tr><th>季</th><th>月份</th><th>一季的三個月</th><th>花木、景物</th></tr></thead>
+<tbody>
+<tr><th scope="row">春</th><td>1–3月</td><td>孟春、仲春、暮春(季春)</td><td>柳、桃、杏</td></tr><tr><th scope="row">夏</th><td>4–6月</td><td>孟夏、仲夏、季夏</td><td>蓮、荷、瓜</td></tr><tr><th scope="row">秋</th><td>7–9月</td><td>孟秋、仲秋、季秋</td><td>菊、桂、楓、霜、茱萸</td></tr><tr><th scope="row">冬</th><td>10–12月</td><td>孟冬、仲冬、季冬</td><td>雪、梅</td></tr>
+</tbody></table></div>
+    <h3>節日詩句配對</h3>
+    <div class="tablewrap"><table class="meaning ">
+<thead><tr><th>節日</th><th>日期</th><th>詩句</th></tr></thead>
+<tbody>
+<tr><th scope="row">九月九日憶山東兄弟(王維)</th><td>9/9</td><td>獨在異鄉為異客,每逢佳節倍思親。遙知兄弟登高處,遍插茱萸少一人。</td></tr><tr><th scope="row">元宵節</th><td>1/15</td><td>東風夜放花千樹,更吹落、星如雨。寶馬雕車香滿路,鳳簫聲動,玉壺光轉,一夜魚龍舞。</td></tr><tr><th scope="row">除夕</th><td>12/30</td><td>今歲今宵盡,又見一家春。</td></tr><tr><th scope="row">元旦</th><td>1/1</td><td>爆竹聲中一歲除,春風送暖入屠蘇。</td></tr><tr><th scope="row">除夕</th><td>12/30</td><td>燭盡年還別,雞鳴老更新。</td></tr>
+</tbody></table></div>
+  </section>
+
+  <section id="practice">
+    <h2 class="newpage">古文今讀 6–10 課　虛字練習</h2>
+    <p class="infoline printonly">班級：＿＿＿＿　座號：＿＿＿＿　姓名：＿＿＿＿＿＿　　得分：＿＿＿＿</p>
+    <p class="rule">選擇題（每題 4 分，共 100 分）。粗體加底線的字為題目所問的字。直接點選答案作答。</p>
+<h3 class="lesson">虛字練習（課文中的虛字）</h3>
+<ol class="qs">
+<li class="q" data-a="B" data-sec="v" data-pts="4"><div class="stem">「謂鹿<u><b>為</b></u>馬」的「為」,意思是?</div><ul class="opts"><li><button type="button" class="opt" data-k="A"><span class="lab">(A)</span> 為了<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="B"><span class="lab">(B)</span> 當作、是<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="C"><span class="lab">(C)</span> 替<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="D"><span class="lab">(D)</span> 行為<span class="mark" aria-hidden="true"></span></button></li></ul><div class="exp" hidden><b class="res"></b><span class="et">「謂 A 為 B」= 把 A 說成是 B。</span></div></li>
+<li class="q" data-a="D" data-sec="v" data-pts="4"><div class="stem">「左右<u><b>或</b></u>默,<u><b>或</b></u>言馬」的「或」,意思是?</div><ul class="opts"><li><button type="button" class="opt" data-k="A"><span class="lab">(A)</span> 有時<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="B"><span class="lab">(B)</span> 或者<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="C"><span class="lab">(C)</span> 如果<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="D"><span class="lab">(D)</span> 有的(人)<span class="mark" aria-hidden="true"></span></button></li></ul><div class="exp" hidden><b class="res"></b><span class="et">說的是左右的官員:有的人沉默,有的人說是馬。</span></div></li>
+<li class="q" data-a="A" data-sec="v" data-pts="4"><div class="stem">「<u><b>比</b></u>至於外,才餘半在」的「比」,意思是?</div><ul class="opts"><li><button type="button" class="opt" data-k="A"><span class="lab">(A)</span> 等到<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="B"><span class="lab">(B)</span> 比較<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="C"><span class="lab">(C)</span> 並列緊靠<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="D"><span class="lab">(D)</span> 結黨營私<span class="mark" aria-hidden="true"></span></button></li></ul><div class="exp" hidden><b class="res"></b><span class="et">比(ㄅㄧˋ)= 等到;等到走到外面,只剩一半了。</span></div></li>
+<li class="q" data-a="C" data-sec="v" data-pts="4"><div class="stem">「<u><b>尋復</b></u>囑云」的「尋」「復」,意思依序是?</div><ul class="opts"><li><button type="button" class="opt" data-k="A"><span class="lab">(A)</span> 尋找、回復<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="B"><span class="lab">(B)</span> 不久、再<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="C"><span class="lab">(C)</span> 隨即、又<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="D"><span class="lab">(D)</span> 尋找、又<span class="mark" aria-hidden="true"></span></button></li></ul><div class="exp" hidden><b class="res"></b><span class="et">尋 = 隨即;復 = 又、再。</span></div></li>
+<li class="q" data-a="C" data-sec="v" data-pts="4"><div class="stem">「於是<u><b>舉</b></u>州皆謂『燈』為『火』」的「舉」,意思是?</div><ul class="opts"><li><button type="button" class="opt" data-k="A"><span class="lab">(A)</span> 舉起<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="B"><span class="lab">(B)</span> 推舉<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="C"><span class="lab">(C)</span> 整個<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="D"><span class="lab">(D)</span> 提出<span class="mark" aria-hidden="true"></span></button></li></ul><div class="exp" hidden><b class="res"></b><span class="et">舉州 = 整個州。舉、悉、竟都可以表示「全部」。</span></div></li>
+<li class="q" data-a="A" data-sec="v" data-pts="4"><div class="stem">「揭<u><b>於</b></u>市曰」的「於」,意思是?</div><ul class="opts"><li><button type="button" class="opt" data-k="A"><span class="lab">(A)</span> 在<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="B"><span class="lab">(B)</span> 給<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="C"><span class="lab">(C)</span> 比<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="D"><span class="lab">(D)</span> 向<span class="mark" aria-hidden="true"></span></button></li></ul><div class="exp" hidden><b class="res"></b><span class="et">揭於市 = 公布在市集上。對照「獻於二世」的「於」= 給。</span></div></li>
+<li class="q" data-a="D" data-sec="v" data-pts="4"><div class="stem">「患記問不<u><b>若</b></u>人」的「若」,意思是?</div><ul class="opts"><li><button type="button" class="opt" data-k="A"><span class="lab">(A)</span> 如果<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="B"><span class="lab">(B)</span> 好像<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="C"><span class="lab">(C)</span> 你<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="D"><span class="lab">(D)</span> 及、比得上<span class="mark" aria-hidden="true"></span></button></li></ul><div class="exp" hidden><b class="res"></b><span class="et">擔心記憶力比不上別人。「若」「如」可表示比較。</span></div></li>
+<li class="q" data-a="B" data-sec="v" data-pts="4"><div class="stem">「<u><b>或</b></u>在馬上,<u><b>或</b></u>中夜不寢時」的「或」,意思是?</div><ul class="opts"><li><button type="button" class="opt" data-k="A"><span class="lab">(A)</span> 有的人<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="B"><span class="lab">(B)</span> 有時<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="C"><span class="lab">(C)</span> 如果<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="D"><span class="lab">(D)</span> 並且<span class="mark" aria-hidden="true"></span></button></li></ul><div class="exp" hidden><b class="res"></b><span class="et">有時在馬上,有時半夜睡不著的時候。</span></div></li>
+<li class="q" data-a="B" data-sec="v" data-pts="4"><div class="stem">「古<u><b>之</b></u>賢君」的「之」,意思是?</div><ul class="opts"><li><button type="button" class="opt" data-k="A"><span class="lab">(A)</span> 他<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="B"><span class="lab">(B)</span> 的<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="C"><span class="lab">(C)</span> 到<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="D"><span class="lab">(D)</span> 這<span class="mark" aria-hidden="true"></span></button></li></ul><div class="exp" hidden><b class="res"></b><span class="et">之 = 的,放在兩個名詞之間。</span></div></li>
+<li class="q" data-a="D" data-sec="v" data-pts="4"><div class="stem">「立<u><b>有間</b></u>」的「有間」,意思最接近下列何者?</div><ul class="opts"><li><button type="button" class="opt" data-k="A"><span class="lab">(A)</span> 遙遠<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="B"><span class="lab">(B)</span> 空閒<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="C"><span class="lab">(C)</span> 間隔<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="D"><span class="lab">(D)</span> 須臾<span class="mark" aria-hidden="true"></span></button></li></ul><div class="exp" hidden><b class="res"></b><span class="et">有間 = 一會兒。須臾、俄而、剎那、彈指都是很短的時間。</span></div></li>
+</ol>
+<p class="sec-score" data-sec="v"></p>
+<h3 class="lesson">勤學成語</h3>
+<ol class="qs" style="counter-reset: q 10">
+<li class="q" data-a="A" data-sec="q" data-pts="4"><div class="stem">下列成語,何者與「孔子讀《易經》,翻斷牛皮繩」有關?</div><ul class="opts"><li><button type="button" class="opt" data-k="A"><span class="lab">(A)</span> 韋編三絕<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="B"><span class="lab">(B)</span> 目不窺園<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="C"><span class="lab">(C)</span> 牛角掛書<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="D"><span class="lab">(D)</span> 懸梁刺股<span class="mark" aria-hidden="true"></span></button></li></ul><div class="exp" hidden><b class="res"></b><span class="et">韋編三絕:韋是牛皮繩,編聯竹簡的繩子翻斷多次,形容讀書刻苦。</span></div></li>
+<li class="q" data-a="C" data-sec="q" data-pts="4"><div class="stem">「夙夜匪懈」的「夙」「匪」,讀音依序是?</div><ul class="opts"><li><button type="button" class="opt" data-k="A"><span class="lab">(A)</span> ㄒㄧˊ、ㄈㄟˇ<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="B"><span class="lab">(B)</span> ㄙㄨˋ、ㄈㄟˊ<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="C"><span class="lab">(C)</span> ㄙㄨˋ、ㄈㄟˇ<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="D"><span class="lab">(D)</span> ㄒㄧˊ、ㄈㄟˋ<span class="mark" aria-hidden="true"></span></button></li></ul><div class="exp" hidden><b class="res"></b><span class="et">夙(ㄙㄨˋ)= 早晨;匪(ㄈㄟˇ)= 不。</span></div></li>
+<li class="q" data-a="C" data-sec="q" data-pts="4"><div class="stem">「夙夜<u><b>匪</b></u>懈」的「匪」,意思是?</div><ul class="opts"><li><button type="button" class="opt" data-k="A"><span class="lab">(A)</span> 強盜<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="B"><span class="lab">(B)</span> 很<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="C"><span class="lab">(C)</span> 不<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="D"><span class="lab">(D)</span> 才<span class="mark" aria-hidden="true"></span></button></li></ul><div class="exp" hidden><b class="res"></b><span class="et">匪 = 不。夙夜匪懈:白天黑夜都不懈怠。</span></div></li>
+<li class="q" data-a="A" data-sec="q" data-pts="4"><div class="stem">下列成語,何者與董仲舒專心讀書、不看窗外有關?</div><ul class="opts"><li><button type="button" class="opt" data-k="A"><span class="lab">(A)</span> 目不窺園<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="B"><span class="lab">(B)</span> 鑿壁偷光<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="C"><span class="lab">(C)</span> 囊螢映雪<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="D"><span class="lab">(D)</span> 焚膏繼晷<span class="mark" aria-hidden="true"></span></button></li></ul><div class="exp" hidden><b class="res"></b><span class="et">目不窺園:專心讀書,連園子都不看。與「下帷」相呼應。</span></div></li>
+<li class="q" data-a="D" data-sec="q" data-pts="4"><div class="stem">下列成語,何者「不是」形容讀書勤奮?</div><ul class="opts"><li><button type="button" class="opt" data-k="A"><span class="lab">(A)</span> 手不釋卷<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="B"><span class="lab">(B)</span> 廢寢忘食<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="C"><span class="lab">(C)</span> 韋編三絕<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="D"><span class="lab">(D)</span> 朋比為奸<span class="mark" aria-hidden="true"></span></button></li></ul><div class="exp" hidden><b class="res"></b><span class="et">朋比為奸(ㄅㄧˋ)是結黨營私,和讀書無關。</span></div></li>
+<li class="q" data-a="B" data-sec="q" data-pts="4"><div class="stem">「囊螢映雪」的意思是?</div><ul class="opts one"><li><button type="button" class="opt" data-k="A"><span class="lab">(A)</span> 抓螢火蟲玩耍<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="B"><span class="lab">(B)</span> 利用螢火蟲和雪的微光讀書<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="C"><span class="lab">(C)</span> 在雪地裡賞螢<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="D"><span class="lab">(D)</span> 把書藏在袋子裡<span class="mark" aria-hidden="true"></span></button></li></ul><div class="exp" hidden><b class="res"></b><span class="et">囊:用袋子裝。家中沒錢買燈油,就借螢光、雪光讀書。</span></div></li>
+<li class="q" data-a="B" data-sec="q" data-pts="4"><div class="stem">「焚膏繼<u><b>晷</b></u>」的「晷」,意思是?</div><ul class="opts"><li><button type="button" class="opt" data-k="A"><span class="lab">(A)</span> 燈<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="B"><span class="lab">(B)</span> 日光<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="C"><span class="lab">(C)</span> 夜晚<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="D"><span class="lab">(D)</span> 書本<span class="mark" aria-hidden="true"></span></button></li></ul><div class="exp" hidden><b class="res"></b><span class="et">焚膏:點燈;繼晷:接續日光。形容夜以繼日地用功。</span></div></li>
+<li class="q" data-a="D" data-sec="q" data-pts="4"><div class="stem">「牛角掛書」形容什麼?</div><ul class="opts one"><li><button type="button" class="opt" data-k="A"><span class="lab">(A)</span> 收藏書籍<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="B"><span class="lab">(B)</span> 不愛讀書<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="C"><span class="lab">(C)</span> 用牛角裝飾書房<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="D"><span class="lab">(D)</span> 珍惜時間,連放牛時也讀書<span class="mark" aria-hidden="true"></span></button></li></ul><div class="exp" hidden><b class="res"></b><span class="et">把書掛在牛角上,趁空檔讀書。</span></div></li>
+</ol>
+<p class="sec-score" data-sec="q"></p>
+<h3 class="lesson">季節與節日</h3>
+<ol class="qs" style="counter-reset: q 18">
+<li class="q" data-a="A" data-sec="s" data-pts="4"><div class="stem">「孟、仲、季」依序表示一季中的第幾個月?</div><ul class="opts"><li><button type="button" class="opt" data-k="A"><span class="lab">(A)</span> 第一、第二、第三<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="B"><span class="lab">(B)</span> 第三、第二、第一<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="C"><span class="lab">(C)</span> 第二、第一、第三<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="D"><span class="lab">(D)</span> 都是第一個月<span class="mark" aria-hidden="true"></span></button></li></ul><div class="exp" hidden><b class="res"></b><span class="et">例如春季:孟春(1月)、仲春(2月)、季春(3月)。</span></div></li>
+<li class="q" data-a="C" data-sec="s" data-pts="4"><div class="stem">「暮春」指的是?</div><ul class="opts"><li><button type="button" class="opt" data-k="A"><span class="lab">(A)</span> 春天的第一個月<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="B"><span class="lab">(B)</span> 春天的第二個月<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="C"><span class="lab">(C)</span> 春天的最後一個月<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="D"><span class="lab">(D)</span> 春夏之間<span class="mark" aria-hidden="true"></span></button></li></ul><div class="exp" hidden><b class="res"></b><span class="et">暮 = 晚、末。暮春就是季春,春天的最後一個月。</span></div></li>
+<li class="q" data-a="C" data-sec="s" data-pts="4"><div class="stem">下列花木與季節的配對,何者正確?</div><ul class="opts"><li><button type="button" class="opt" data-k="A"><span class="lab">(A)</span> 桃、杏 — 冬<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="B"><span class="lab">(B)</span> 雪、梅 — 春<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="C"><span class="lab">(C)</span> 蓮、荷 — 夏<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="D"><span class="lab">(D)</span> 柳 — 秋<span class="mark" aria-hidden="true"></span></button></li></ul><div class="exp" hidden><b class="res"></b><span class="et">春:柳、桃、杏;夏:蓮、荷、瓜;秋:菊、桂、楓、茱萸;冬:雪、梅。</span></div></li>
+<li class="q" data-a="A" data-sec="s" data-pts="4"><div class="stem">「獨在異鄉為異客,每逢佳節倍思親」中的「佳節」,指的是?</div><ul class="opts"><li><button type="button" class="opt" data-k="A"><span class="lab">(A)</span> 重陽節<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="B"><span class="lab">(B)</span> 元宵節<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="C"><span class="lab">(C)</span> 除夕<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="D"><span class="lab">(D)</span> 元旦<span class="mark" aria-hidden="true"></span></button></li></ul><div class="exp" hidden><b class="res"></b><span class="et">詩題〈九月九日憶山東兄弟〉,9 月 9 日是重陽節,詩中還提到茱萸(秋季)。</span></div></li>
+<li class="q" data-a="D" data-sec="s" data-pts="4"><div class="stem">「東風夜放花千樹……一夜魚龍舞」,描寫的是哪個節日?</div><ul class="opts"><li><button type="button" class="opt" data-k="A"><span class="lab">(A)</span> 除夕<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="B"><span class="lab">(B)</span> 中秋節<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="C"><span class="lab">(C)</span> 端午節<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="D"><span class="lab">(D)</span> 元宵節<span class="mark" aria-hidden="true"></span></button></li></ul><div class="exp" hidden><b class="res"></b><span class="et">元宵節(1/15)要張掛花燈、放燈,呼應第 8 課的「上元放燈」。</span></div></li>
+<li class="q" data-a="B" data-sec="s" data-pts="4"><div class="stem">「今歲今宵盡,又見一家春」,描寫的是哪個節日?</div><ul class="opts"><li><button type="button" class="opt" data-k="A"><span class="lab">(A)</span> 元宵節<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="B"><span class="lab">(B)</span> 除夕<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="C"><span class="lab">(C)</span> 元旦<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="D"><span class="lab">(D)</span> 重陽節<span class="mark" aria-hidden="true"></span></button></li></ul><div class="exp" hidden><b class="res"></b><span class="et">今宵盡:今年只剩今晚,也就是除夕(12/30)。</span></div></li>
+<li class="q" data-a="B" data-sec="s" data-pts="4"><div class="stem">「爆竹聲中一歲除,春風送暖入屠蘇」,描寫的是哪個節日?</div><ul class="opts"><li><button type="button" class="opt" data-k="A"><span class="lab">(A)</span> 除夕<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="B"><span class="lab">(B)</span> 元旦<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="C"><span class="lab">(C)</span> 元宵節<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="D"><span class="lab">(D)</span> 重陽節<span class="mark" aria-hidden="true"></span></button></li></ul><div class="exp" hidden><b class="res"></b><span class="et">一歲除、春風送暖:舊年過去、新年開始,是元旦(1/1)。</span></div></li>
+</ol>
+<p class="sec-score" data-sec="s"></p>
+  </section>
+
+  <section id="lessonqs">
+    <h2 class="newpage">古文今讀 6–10 課　課文選擇題</h2>
+    <p class="infoline printonly">班級：＿＿＿＿　座號：＿＿＿＿　姓名：＿＿＿＿＿＿　　得分：＿＿＿＿</p>
+    <p class="rule">課文文意選擇題（每課 4 題，每題 5 分，共 100 分）。直接點選答案作答。</p>
+<h3 class="lesson">第6課　指鹿為馬<small>　《史記》</small></h3>
+<ol class="qs">
+<li class="q" data-a="C" data-sec="l6" data-pts="5"><div class="stem">趙高「持鹿獻於二世」，主要的目的是什麼？</div><ul class="opts"><li><button type="button" class="opt" data-k="A"><span class="lab">(A)</span> 獻上珍禽討好二世<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="B"><span class="lab">(B)</span> 嘲笑二世不認識馬<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="C"><span class="lab">(C)</span> 試驗群臣是否聽從自己<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="D"><span class="lab">(D)</span> 測試二世的眼力<span class="mark" aria-hidden="true"></span></button></li></ul><div class="exp" hidden><b class="res"></b><span class="et">課文說趙高「恐群臣不聽，乃先設驗」，牽鹿指為馬，是要試探群臣會不會順從他。</span></div></li>
+<li class="q" data-a="A" data-sec="l6" data-pts="5"><div class="stem">聽到趙高說「馬也」，二世的反應是什麼？</div><ul class="opts"><li><button type="button" class="opt" data-k="A"><span class="lab">(A)</span> 笑著說丞相說錯了<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="B"><span class="lab">(B)</span> 勃然大怒<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="C"><span class="lab">(C)</span> 立刻同意是馬<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="D"><span class="lab">(D)</span> 沉默不語<span class="mark" aria-hidden="true"></span></button></li></ul><div class="exp" hidden><b class="res"></b><span class="et">「二世笑曰：丞相誤邪？謂鹿為馬。」二世以為趙高講錯了，並不知道這是試驗。</span></div></li>
+<li class="q" data-a="D" data-sec="l6" data-pts="5"><div class="stem">二世問左右的人，左右的反應是什麼？</div><ul class="opts one"><li><button type="button" class="opt" data-k="A"><span class="lab">(A)</span> 全都說是鹿<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="B"><span class="lab">(B)</span> 全都說是馬<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="C"><span class="lab">(C)</span> 全都保持沉默<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="D"><span class="lab">(D)</span> 有人沉默、有人說是馬，也有人說是鹿<span class="mark" aria-hidden="true"></span></button></li></ul><div class="exp" hidden><b class="res"></b><span class="et">「左右或默，或言馬以阿順趙高。或言鹿者……」大臣的反應有三種。</span></div></li>
+<li class="q" data-a="B" data-sec="l6" data-pts="5"><div class="stem">課文最後說「後群臣皆畏高」，主要原因是什麼？</div><ul class="opts one"><li><button type="button" class="opt" data-k="A"><span class="lab">(A)</span> 趙高武功高強<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="B"><span class="lab">(B)</span> 趙高暗地裡用法令陷害了說是鹿的人<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="C"><span class="lab">(C)</span> 趙高賞賜了所有大臣<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="D"><span class="lab">(D)</span> 二世下令大臣服從趙高<span class="mark" aria-hidden="true"></span></button></li></ul><div class="exp" hidden><b class="res"></b><span class="et">「高因陰中諸言鹿者以法」，趙高暗中陷害說真話的人，群臣因此畏懼他。</span></div></li>
+</ol>
+<p class="sec-score" data-sec="l6"></p>
+<h3 class="lesson">第7課　漢世老人<small>　《笑林》</small></h3>
+<ol class="qs">
+<li class="q" data-a="B" data-sec="l7" data-pts="5"><div class="stem">老人平日的生活方式，最接近下列何者？</div><ul class="opts one"><li><button type="button" class="opt" data-k="A"><span class="lab">(A)</span> 講究衣食，享受生活<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="B"><span class="lab">(B)</span> 粗衣淡飯，早起晚睡，辛勤經營產業<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="C"><span class="lab">(C)</span> 遊手好閒，不事生產<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="D"><span class="lab">(D)</span> 四處旅行，樂善好施<span class="mark" aria-hidden="true"></span></button></li></ul><div class="exp" hidden><b class="res"></b><span class="et">「惡衣疏食，侵晨而起，侵夜而息，營理產業」，可見他生活儉省又勤勞。</span></div></li>
+<li class="q" data-a="D" data-sec="l7" data-pts="5"><div class="stem">老人取錢十文，走到門外卻只剩一半，原因是什麼？</div><ul class="opts one"><li><button type="button" class="opt" data-k="A"><span class="lab">(A)</span> 被人偷走了<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="B"><span class="lab">(B)</span> 半路掉在地上<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="C"><span class="lab">(C)</span> 乞討的人只肯拿一半<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="D"><span class="lab">(D)</span> 一路上不斷減少，捨不得多給<span class="mark" aria-hidden="true"></span></button></li></ul><div class="exp" hidden><b class="res"></b><span class="et">「自堂而出，隨步輒減」，老人每走一步就減一點，到門外只剩半數。</span></div></li>
+<li class="q" data-a="A" data-sec="l7" data-pts="5"><div class="stem">老人叮囑乞者「慎勿他說」，用意是什麼？</div><ul class="opts"><li><button type="button" class="opt" data-k="A"><span class="lab">(A)</span> 怕別人也來仿效乞討<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="B"><span class="lab">(B)</span> 希望乞者替他宣傳善名<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="C"><span class="lab">(C)</span> 怕官府知道他有錢<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="D"><span class="lab">(D)</span> 要乞者日後報答<span class="mark" aria-hidden="true"></span></button></li></ul><div class="exp" hidden><b class="res"></b><span class="et">「復相效而來」：他怕別人聽了也跟著來要錢，所以要乞者別對別人說。</span></div></li>
+<li class="q" data-a="C" data-sec="l7" data-pts="5"><div class="stem">這則故事主要在諷刺哪一種人？</div><ul class="opts one"><li><button type="button" class="opt" data-k="A"><span class="lab">(A)</span> 貧窮又愛乞討的人<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="B"><span class="lab">(B)</span> 貪汙舞弊的官員<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="C"><span class="lab">(C)</span> 只知積聚錢財，卻捨不得用的守財奴<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="D"><span class="lab">(D)</span> 不孝順的子女<span class="mark" aria-hidden="true"></span></button></li></ul><div class="exp" hidden><b class="res"></b><span class="et">老人「聚斂無厭，而不敢自用」，錢財最後也只是充公，故事諷刺守財奴。</span></div></li>
+</ol>
+<p class="sec-score" data-sec="l7"></p>
+<h3 class="lesson">第8課　州官放火<small>　《老學庵筆記》</small></h3>
+<ol class="qs">
+<li class="q" data-a="C" data-sec="l8" data-pts="5"><div class="stem">課文中，觸犯田登名諱的人會有什麼下場？</div><ul class="opts"><li><button type="button" class="opt" data-k="A"><span class="lab">(A)</span> 被罰款<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="B"><span class="lab">(B)</span> 被關進牢裡<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="C"><span class="lab">(C)</span> 被鞭打<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="D"><span class="lab">(D)</span> 被罷官<span class="mark" aria-hidden="true"></span></button></li></ul><div class="exp" hidden><b class="res"></b><span class="et">「觸者必怒，吏卒多被榜笞」，「榜笞」就是鞭打。</span></div></li>
+<li class="q" data-a="A" data-sec="l8" data-pts="5"><div class="stem">州內的人為什麼都把「燈」說成「火」？</div><ul class="opts one"><li><button type="button" class="opt" data-k="A"><span class="lab">(A)</span> 避免說到「登」的同音字而遭到責打<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="B"><span class="lab">(B)</span> 火比燈更明亮<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="C"><span class="lab">(C)</span> 當地的方言習慣<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="D"><span class="lab">(D)</span> 為了慶祝元宵節<span class="mark" aria-hidden="true"></span></button></li></ul><div class="exp" hidden><b class="res"></b><span class="et">田登自諱其名，「登」與「燈」同音，眾人怕觸犯而受罰，所以改稱「火」。</span></div></li>
+<li class="q" data-a="D" data-sec="l8" data-pts="5"><div class="stem">官府的告示寫「本州依例，放火三日」，實際的意思是什麼？</div><ul class="opts"><li><button type="button" class="opt" data-k="A"><span class="lab">(A)</span> 舉辦放火演習<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="B"><span class="lab">(B)</span> 禁止百姓點燈<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="C"><span class="lab">(C)</span> 慶祝火神節<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="D"><span class="lab">(D)</span> 允許百姓點燈三天<span class="mark" aria-hidden="true"></span></button></li></ul><div class="exp" hidden><b class="res"></b><span class="et">「火」是避諱「燈」的說法，「放火三日」其實是元宵放燈三天。</span></div></li>
+<li class="q" data-a="B" data-sec="l8" data-pts="5"><div class="stem">元宵節（上元）時，課文提到當時的習俗是什麼？</div><ul class="opts"><li><button type="button" class="opt" data-k="A"><span class="lab">(A)</span> 登高<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="B"><span class="lab">(B)</span> 張掛花燈<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="C"><span class="lab">(C)</span> 賽龍舟<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="D"><span class="lab">(D)</span> 插茱萸<span class="mark" aria-hidden="true"></span></button></li></ul><div class="exp" hidden><b class="res"></b><span class="et">「上元放燈，許人入州治遊觀。」元宵節有張掛花燈、讓人遊觀賞燈的習俗。</span></div></li>
+</ol>
+<p class="sec-score" data-sec="l8"></p>
+<h3 class="lesson">第9課　司馬光勤學<small>　《三朝名臣言行錄》</small></h3>
+<ol class="qs">
+<li class="q" data-a="B" data-sec="l9" data-pts="5"><div class="stem">司馬光幼年時擔心自己什麼？</div><ul class="opts"><li><button type="button" class="opt" data-k="A"><span class="lab">(A)</span> 家境貧窮<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="B"><span class="lab">(B)</span> 記憶力比不上別人<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="C"><span class="lab">(C)</span> 沒有老師指導<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="D"><span class="lab">(D)</span> 身體虛弱<span class="mark" aria-hidden="true"></span></button></li></ul><div class="exp" hidden><b class="res"></b><span class="et">「患記問不若人」：擔心自己記誦、詢問的能力不如別人。</span></div></li>
+<li class="q" data-a="D" data-sec="l9" data-pts="5"><div class="stem">兄弟們背熟了書就去玩耍，司馬光卻怎麼做？</div><ul class="opts one"><li><button type="button" class="opt" data-k="A"><span class="lab">(A)</span> 一起去玩耍<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="B"><span class="lab">(B)</span> 請老師來教導<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="C"><span class="lab">(C)</span> 早早睡覺<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="D"><span class="lab">(D)</span> 獨自放下帷幔，反覆誦讀到能背誦才停止<span class="mark" aria-hidden="true"></span></button></li></ul><div class="exp" hidden><b class="res"></b><span class="et">「獨下帷絕編，迨能倍誦乃止」，他一個人專心苦讀，直到能背誦為止。</span></div></li>
+<li class="q" data-a="A" data-sec="l9" data-pts="5"><div class="stem">司馬光說「書不可不成誦」，他認為書背熟了有什麼好處？</div><ul class="opts one"><li><button type="button" class="opt" data-k="A"><span class="lab">(A)</span> 沒有書本可讀時，也能默誦文章、思考意義<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="B"><span class="lab">(B)</span> 可以在別人面前炫耀<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="C"><span class="lab">(C)</span> 可以應付考試<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="D"><span class="lab">(D)</span> 可以教導別人<span class="mark" aria-hidden="true"></span></button></li></ul><div class="exp" hidden><b class="res"></b><span class="et">「或在馬上，或中夜不寢時，詠其文，思其義，所得多矣」，背熟的書隨時能拿來思考。</span></div></li>
+<li class="q" data-a="C" data-sec="l9" data-pts="5"><div class="stem">「用力多者收功遠」的意思，最接近下列何者？</div><ul class="opts one"><li><button type="button" class="opt" data-k="A"><span class="lab">(A)</span> 力氣大的人容易成功<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="B"><span class="lab">(B)</span> 不必用功也能成功<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="C"><span class="lab">(C)</span> 花的心力越多，收穫越長遠<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="D"><span class="lab">(D)</span> 努力一時就能成功<span class="mark" aria-hidden="true"></span></button></li></ul><div class="exp" hidden><b class="res"></b><span class="et">用力多、下功夫多的人，得到的成效長遠，所精熟背誦的內容「終身不忘」。</span></div></li>
+</ol>
+<p class="sec-score" data-sec="l9"></p>
+<h3 class="lesson">第10課　晏子諫君<small>　《晏子春秋》</small></h3>
+<ol class="qs">
+<li class="q" data-a="C" data-sec="l10" data-pts="5"><div class="stem">景公說「怪哉！雨雪三日而天不寒」，晏子的回應是什麼？</div><ul class="opts"><li><button type="button" class="opt" data-k="A"><span class="lab">(A)</span> 附和景公的看法<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="B"><span class="lab">(B)</span> 一言不發<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="C"><span class="lab">(C)</span> 反問「天不寒乎？」<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="D"><span class="lab">(D)</span> 責罵景公糊塗<span class="mark" aria-hidden="true"></span></button></li></ul><div class="exp" hidden><b class="res"></b><span class="et">「晏子對曰：天不寒乎？」晏子用反問委婉地提醒景公。</span></div></li>
+<li class="q" data-a="A" data-sec="l10" data-pts="5"><div class="stem">晏子說古代賢君的共同點是什麼？</div><ul class="opts one"><li><button type="button" class="opt" data-k="A"><span class="lab">(A)</span> 自己溫飽安逸時，能體會別人的飢寒勞苦<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="B"><span class="lab">(B)</span> 生活非常節儉，不穿皮裘<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="C"><span class="lab">(C)</span> 喜歡在雪天出遊<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="D"><span class="lab">(D)</span> 不聽大臣的勸告<span class="mark" aria-hidden="true"></span></button></li></ul><div class="exp" hidden><b class="res"></b><span class="et">「飽而知人之飢，溫而知人之寒，逸而知人之勞」。</span></div></li>
+<li class="q" data-a="D" data-sec="l10" data-pts="5"><div class="stem">聽完晏子的話，景公實際採取的行動是什麼？</div><ul class="opts one"><li><button type="button" class="opt" data-k="A"><span class="lab">(A)</span> 責備晏子多事<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="B"><span class="lab">(B)</span> 脫下狐裘自己穿粗布衣<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="C"><span class="lab">(C)</span> 舉行祭天典禮<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="D"><span class="lab">(D)</span> 下令拿出皮衣和糧食給飢寒的人<span class="mark" aria-hidden="true"></span></button></li></ul><div class="exp" hidden><b class="res"></b><span class="et">「乃令出裘發粟與飢寒」，景公立刻發放衣服和糧食。</span></div></li>
+<li class="q" data-a="B" data-sec="l10" data-pts="5"><div class="stem">晏子勸諫景公的方式，最接近下列何者？</div><ul class="opts one"><li><button type="button" class="opt" data-k="A"><span class="lab">(A)</span> 直接嚴厲批評<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="B"><span class="lab">(B)</span> 先反問，再舉賢君為例，委婉勸說<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="C"><span class="lab">(C)</span> 向百姓公開景公的過失<span class="mark" aria-hidden="true"></span></button></li><li><button type="button" class="opt" data-k="D"><span class="lab">(D)</span> 憤而辭官<span class="mark" aria-hidden="true"></span></button></li></ul><div class="exp" hidden><b class="res"></b><span class="et">晏子先問「天不寒乎」，再以賢君為例，說得委婉而使景公接受。</span></div></li>
+</ol>
+<p class="sec-score" data-sec="l10"></p>
+  </section>
+
+  <section id="answers">
+    <h2 class="newpage">參考答案與解析</h2>
+    <details class="answers">
+      <summary>顯示參考答案與解析（老師用）</summary>
+      <h3>壹、虛字練習</h3>
+      <div class="tablewrap"><table class="key">
+<thead><tr><th>題號</th><th>答案</th><th>解析</th></tr></thead>
+<tbody>
+<tr><td class="c">1</td><td class="c ans">B</td><td>「謂 A 為 B」= 把 A 說成是 B。</td></tr><tr><td class="c">2</td><td class="c ans">D</td><td>說的是左右的官員:有的人沉默,有的人說是馬。</td></tr><tr><td class="c">3</td><td class="c ans">A</td><td>比(ㄅㄧˋ)= 等到;等到走到外面,只剩一半了。</td></tr><tr><td class="c">4</td><td class="c ans">C</td><td>尋 = 隨即;復 = 又、再。</td></tr><tr><td class="c">5</td><td class="c ans">C</td><td>舉州 = 整個州。舉、悉、竟都可以表示「全部」。</td></tr><tr><td class="c">6</td><td class="c ans">A</td><td>揭於市 = 公布在市集上。對照「獻於二世」的「於」= 給。</td></tr><tr><td class="c">7</td><td class="c ans">D</td><td>擔心記憶力比不上別人。「若」「如」可表示比較。</td></tr><tr><td class="c">8</td><td class="c ans">B</td><td>有時在馬上,有時半夜睡不著的時候。</td></tr><tr><td class="c">9</td><td class="c ans">B</td><td>之 = 的,放在兩個名詞之間。</td></tr><tr><td class="c">10</td><td class="c ans">D</td><td>有間 = 一會兒。須臾、俄而、剎那、彈指都是很短的時間。</td></tr><tr><td class="c">11</td><td class="c ans">A</td><td>韋編三絕:韋是牛皮繩,編聯竹簡的繩子翻斷多次,形容讀書刻苦。</td></tr><tr><td class="c">12</td><td class="c ans">C</td><td>夙(ㄙㄨˋ)= 早晨;匪(ㄈㄟˇ)= 不。</td></tr><tr><td class="c">13</td><td class="c ans">C</td><td>匪 = 不。夙夜匪懈:白天黑夜都不懈怠。</td></tr><tr><td class="c">14</td><td class="c ans">A</td><td>目不窺園:專心讀書,連園子都不看。與「下帷」相呼應。</td></tr><tr><td class="c">15</td><td class="c ans">D</td><td>朋比為奸(ㄅㄧˋ)是結黨營私,和讀書無關。</td></tr><tr><td class="c">16</td><td class="c ans">B</td><td>囊:用袋子裝。家中沒錢買燈油,就借螢光、雪光讀書。</td></tr><tr><td class="c">17</td><td class="c ans">B</td><td>焚膏:點燈;繼晷:接續日光。形容夜以繼日地用功。</td></tr><tr><td class="c">18</td><td class="c ans">D</td><td>把書掛在牛角上,趁空檔讀書。</td></tr><tr><td class="c">19</td><td class="c ans">A</td><td>例如春季:孟春(1月)、仲春(2月)、季春(3月)。</td></tr><tr><td class="c">20</td><td class="c ans">C</td><td>暮 = 晚、末。暮春就是季春,春天的最後一個月。</td></tr><tr><td class="c">21</td><td class="c ans">C</td><td>春:柳、桃、杏;夏:蓮、荷、瓜;秋:菊、桂、楓、茱萸;冬:雪、梅。</td></tr><tr><td class="c">22</td><td class="c ans">A</td><td>詩題〈九月九日憶山東兄弟〉,9 月 9 日是重陽節,詩中還提到茱萸(秋季)。</td></tr><tr><td class="c">23</td><td class="c ans">D</td><td>元宵節(1/15)要張掛花燈、放燈,呼應第 8 課的「上元放燈」。</td></tr><tr><td class="c">24</td><td class="c ans">B</td><td>今宵盡:今年只剩今晚,也就是除夕(12/30)。</td></tr><tr><td class="c">25</td><td class="c ans">B</td><td>一歲除、春風送暖:舊年過去、新年開始,是元旦(1/1)。</td></tr>
+</tbody></table></div>
+      <h3>貳、課文選擇題（題號：課次－題號）</h3>
+      <div class="tablewrap"><table class="key">
+<thead><tr><th>題號</th><th>答案</th><th>解析</th></tr></thead>
+<tbody>
+<tr><td class="c">6－1</td><td class="c ans">C</td><td>課文說趙高「恐群臣不聽，乃先設驗」，牽鹿指為馬，是要試探群臣會不會順從他。</td></tr><tr><td class="c">6－2</td><td class="c ans">A</td><td>「二世笑曰：丞相誤邪？謂鹿為馬。」二世以為趙高講錯了，並不知道這是試驗。</td></tr><tr><td class="c">6－3</td><td class="c ans">D</td><td>「左右或默，或言馬以阿順趙高。或言鹿者……」大臣的反應有三種。</td></tr><tr><td class="c">6－4</td><td class="c ans">B</td><td>「高因陰中諸言鹿者以法」，趙高暗中陷害說真話的人，群臣因此畏懼他。</td></tr><tr><td class="c">7－1</td><td class="c ans">B</td><td>「惡衣疏食，侵晨而起，侵夜而息，營理產業」，可見他生活儉省又勤勞。</td></tr><tr><td class="c">7－2</td><td class="c ans">D</td><td>「自堂而出，隨步輒減」，老人每走一步就減一點，到門外只剩半數。</td></tr><tr><td class="c">7－3</td><td class="c ans">A</td><td>「復相效而來」：他怕別人聽了也跟著來要錢，所以要乞者別對別人說。</td></tr><tr><td class="c">7－4</td><td class="c ans">C</td><td>老人「聚斂無厭，而不敢自用」，錢財最後也只是充公，故事諷刺守財奴。</td></tr><tr><td class="c">8－1</td><td class="c ans">C</td><td>「觸者必怒，吏卒多被榜笞」，「榜笞」就是鞭打。</td></tr><tr><td class="c">8－2</td><td class="c ans">A</td><td>田登自諱其名，「登」與「燈」同音，眾人怕觸犯而受罰，所以改稱「火」。</td></tr><tr><td class="c">8－3</td><td class="c ans">D</td><td>「火」是避諱「燈」的說法，「放火三日」其實是元宵放燈三天。</td></tr><tr><td class="c">8－4</td><td class="c ans">B</td><td>「上元放燈，許人入州治遊觀。」元宵節有張掛花燈、讓人遊觀賞燈的習俗。</td></tr><tr><td class="c">9－1</td><td class="c ans">B</td><td>「患記問不若人」：擔心自己記誦、詢問的能力不如別人。</td></tr><tr><td class="c">9－2</td><td class="c ans">D</td><td>「獨下帷絕編，迨能倍誦乃止」，他一個人專心苦讀，直到能背誦為止。</td></tr><tr><td class="c">9－3</td><td class="c ans">A</td><td>「或在馬上，或中夜不寢時，詠其文，思其義，所得多矣」，背熟的書隨時能拿來思考。</td></tr><tr><td class="c">9－4</td><td class="c ans">C</td><td>用力多、下功夫多的人，得到的成效長遠，所精熟背誦的內容「終身不忘」。</td></tr><tr><td class="c">10－1</td><td class="c ans">C</td><td>「晏子對曰：天不寒乎？」晏子用反問委婉地提醒景公。</td></tr><tr><td class="c">10－2</td><td class="c ans">A</td><td>「飽而知人之飢，溫而知人之寒，逸而知人之勞」。</td></tr><tr><td class="c">10－3</td><td class="c ans">D</td><td>「乃令出裘發粟與飢寒」，景公立刻發放衣服和糧食。</td></tr><tr><td class="c">10－4</td><td class="c ans">B</td><td>晏子先問「天不寒乎」，再以賢君為例，說得委婉而使景公接受。</td></tr>
+</tbody></table></div>
+    </details>
+  </section>
+
+  <footer>古文今讀 6–10 課　虛字整理與選擇題</footer>
+</main>
+<script>
+(function () {
+  var qs = Array.prototype.slice.call(document.querySelectorAll('li.q'));
+  var mode = 'practice', submitted = false;
+  var $ = function (id) { return document.getElementById(id); };
+  var LAB = { p: '', l1: '', l2: '', l3: '', l4: '', l5: '' };
+
+  function reveal(q) {
+    var chosen = q.getAttribute('data-chosen'), ans = q.getAttribute('data-a');
+    var exp = q.querySelector('.exp'), res = q.querySelector('.res');
+    q.classList.add('done');
+    Array.prototype.forEach.call(q.querySelectorAll('button.opt'), function (b) {
+      var k = b.getAttribute('data-k'), m = b.querySelector('.mark');
+      b.classList.remove('sel');
+      b.setAttribute('aria-disabled', 'true');
+      if (k === ans) { b.classList.add('right'); m.textContent = '✓ 正確答案'; }
+      else if (k === chosen) { b.classList.add('wrong'); m.textContent = '✗'; }
+    });
+    exp.hidden = false;
+    if (!chosen) { exp.className = 'exp no'; res.textContent = '未作答，正確答案是 ' + ans + '。'; }
+    else if (chosen === ans) { exp.className = 'exp ok'; res.textContent = '答對了！'; }
+    else { exp.className = 'exp no'; res.textContent = '答錯了，正確答案是 ' + ans + '。'; }
+  }
+
+  function stats() {
+    var answered = 0, correct = 0, secs = {};
+    qs.forEach(function (q) {
+      var s = q.getAttribute('data-sec'), pts = +q.getAttribute('data-pts');
+      secs[s] = secs[s] || { n: 0, a: 0, c: 0, pts: 0, score: 0 };
+      secs[s].n++;
+      var ch = q.getAttribute('data-chosen');
+      if (ch) { answered++; secs[s].a++; }
+      var revealed = q.classList.contains('done');
+      if (revealed && ch === q.getAttribute('data-a')) { correct++; secs[s].c++; secs[s].score += pts; }
+      secs[s].pts += pts;
+    });
+    var revealedAny = qs.some(function (q) { return q.classList.contains('done'); });
+    $('stats').textContent = '已作答 ' + answered + '／' + qs.length + (revealedAny ? '　答對 ' + correct : '');
+    Array.prototype.forEach.call(document.querySelectorAll('.sec-score'), function (el) {
+      var d = secs[el.getAttribute('data-sec')];
+      if (!d) return;
+      var txt = '本單元已作答 ' + d.a + '／' + d.n + ' 題';
+      var allRevealed = qs.filter(function (q) { return q.getAttribute('data-sec') === el.getAttribute('data-sec'); })
+        .every(function (q) { return q.classList.contains('done'); });
+      if (d.c > 0 || allRevealed || (mode === 'practice' && d.a > 0)) txt += '，答對 ' + d.c + ' 題，得分 ' + d.score + '／' + d.pts;
+      el.textContent = txt;
+    });
+  }
+
+  function reset() {
+    submitted = false;
+    qs.forEach(function (q) {
+      q.removeAttribute('data-chosen'); q.classList.remove('done');
+      q.querySelector('.exp').hidden = true;
+      Array.prototype.forEach.call(q.querySelectorAll('button.opt'), function (b) {
+        b.classList.remove('sel', 'right', 'wrong'); b.removeAttribute('aria-disabled');
+        b.querySelector('.mark').textContent = '';
+      });
+    });
+    stats();
+  }
+
+  function setMode(m) {
+    if (m === mode) return;
+    var any = qs.some(function (q) { return q.getAttribute('data-chosen'); });
+    if (any && !window.confirm('切換模式會清除目前的作答，要繼續嗎？')) return;
+    mode = m;
+    $('m-practice').classList.toggle('on', m === 'practice');
+    $('m-test').classList.toggle('on', m === 'test');
+    $('m-practice').setAttribute('aria-pressed', m === 'practice');
+    $('m-test').setAttribute('aria-pressed', m === 'test');
+    $('submit').hidden = m !== 'test';
+    reset();
+  }
+
+  qs.forEach(function (q) {
+    Array.prototype.forEach.call(q.querySelectorAll('button.opt'), function (b) {
+      b.addEventListener('click', function () {
+        if (q.classList.contains('done')) return;
+        q.setAttribute('data-chosen', b.getAttribute('data-k'));
+        if (mode === 'practice') { reveal(q); }
+        else {
+          Array.prototype.forEach.call(q.querySelectorAll('button.opt'), function (o) { o.classList.toggle('sel', o === b); });
+        }
+        stats();
+      });
+    });
+  });
+
+  $('m-practice').addEventListener('click', function () { setMode('practice'); });
+  $('m-test').addEventListener('click', function () { setMode('test'); });
+  $('reset').addEventListener('click', function () {
+    var any = qs.some(function (q) { return q.getAttribute('data-chosen'); });
+    if (!any || window.confirm('要清除目前的作答，重新開始嗎？')) reset();
+  });
+  $('submit').addEventListener('click', function () {
+    var left = qs.filter(function (q) { return !q.getAttribute('data-chosen'); }).length;
+    if (left > 0 && !window.confirm('還有 ' + left + ' 題沒作答，確定要交卷嗎？')) return;
+    submitted = true;
+    qs.forEach(function (q) { if (!q.classList.contains('done')) reveal(q); });
+    stats();
+    var first = document.querySelector('li.q .exp.no');
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  });
+  stats();
+})();
+</script>
+</body>
+</html>
